@@ -1,0 +1,12 @@
+{
+  "name": "nodered",
+  "version": "0.1.0",
+  "description": "my nodered",
+  "scripts": {
+    "start": "node $NODE_OPTIONS node_modules/node-red/red.js $FLOWS"
+  },
+  "dependencies": {
+    "node-red": "^1.1.3",
+    "node-red-node-strava": "^0.1.0"
+  }
+}
