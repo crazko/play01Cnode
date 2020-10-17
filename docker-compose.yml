@@ -2,14 +2,12 @@ version: "3.3"
 
 services:
   node-red:
-    build: .
+    build:
+      context: .
+      args:
+        NODE_RED_VERSION: "1.2.1"
     env_file: .env
     ports:
       - "1880:1880"
-    networks:
-      - node-red-net
     volumes:
       - ./data:/data
-
-networks:
-  node-red-net:

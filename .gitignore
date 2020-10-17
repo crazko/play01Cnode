@@ -1,3 +1,6 @@
 node_modules/
 .env
-*.backup
+
+data/*.backup
+data/.config.*
+data/package.json
