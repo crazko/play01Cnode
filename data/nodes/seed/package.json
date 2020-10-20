@@ -1,0 +1,19 @@
+{
+  "name": "seed",
+  "version": "1.0.0",
+  "description": "node generating a cryptograhic seed",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "seed"
+  ],
+  "author": "Tomas Kanocz",
+  "license": "MIT",
+  "node-red": {
+    "nodes": {
+      "seed": "seed.js"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+<script type="text/javascript">
+    RED.nodes.registerType('seed',{
+        category: 'crypto',
+        color: '#3FADB5',
+        defaults: {
+            name: {value:""},
+            length: {
+              value: 192,
+              validate: function(v) {
+                return RED.validators.number(v) && v >=128  && v % 8 === 0;
+              }
+            }
+        },
+        inputs:0,
+        outputs:1,
+        icon: "seed.png",
+        label: function() {
+            let name = this.name || "seed";
+            let length = this.length || "_error_";
+            return `${name}:${length}b`;
+        },
+        button: {
+          enabled: function() {
+            return !this.changed;
+          },
+          onclick: function () {
+            let label = this._def.label.call(this);
+            if (label.length > 30) {
+                label = label.substring(0,50)+"...";
+            }
+            label = label.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+            let node = this;
+            //https://stackoverflow.com/questions/57148641/how-to-create-a-custom-inject-node-in-nodered
+            $.ajax({
+                url: "seed/"+this.id,
+                type:"POST",
+                success: function(resp) {
+                    RED.notify(node._(`Random ${node.length} bit length seed injected!`),{type:"success",id:"seed"});
+                },
+                error: function(jqXHR,textStatus,errorThrown) {//stolen from core inject
+                    if (jqXHR.status == 404) {
+                        RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.not-deployed")}),"error");
+                    } else if (jqXHR.status == 500) {
+                        RED.notify(node._("common.notification.error",{message:node._("seed.errors.failed")}),"error");
+                    } else if (jqXHR.status == 0) {
+                        RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.no-response")}),"error");
+                    } else {
+                        RED.notify(node._("common.notification.error",{message:node._("common.notification.errors.unexpected",{status:jqXHR.status,message:textStatus})}),"error");
+                    }
+                }
+            });
+          }//end onclik
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="seed">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-length"><i class="fa fa-arrows-h"></i> Bit length</label>
+        <input type="number" id="node-input-length" placeholder="192">
+    </div>
+
+</script>
+
+<script type="text/html" data-help-name="seed">
+    <p>A node which outputs a cryptographic seed as its payload. The bit length must be divisible by 8 and must not be less than 128, defaults to 192.</p>
+</script>
