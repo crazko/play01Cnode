@@ -76,7 +76,9 @@ COPY --from=build /usr/src/node-red/prod_node_modules ./node_modules
 # Chown, install devtools & Clean up
 RUN chown -R node-red:root /usr/src/node-red && \
     apt-get update && apt-get install -y build-essential python-dev python3 && \
-    rm -r /tmp/*
+    rm -r /tmp/* && \
+    apt-get autoremove -y
+
 
 USER node-red
 
@@ -84,6 +86,10 @@ USER node-red
 ENV NODE_RED_VERSION=$NODE_RED_VERSION \
     NODE_PATH=/usr/src/node-red/node_modules:/data/node_modules \
     FLOWS=flows.json
+
+#install custom nodes
+COPY data/nodes /data/nodes
+RUN ls /data/nodes | xargs -i npm install /data/nodes/{}
 
 # ENV NODE_RED_ENABLE_SAFE_MODE=true    # Uncomment to enable safe start mode (flows not running)
 # ENV NODE_RED_ENABLE_PROJECTS=true     # Uncomment to enable projects option

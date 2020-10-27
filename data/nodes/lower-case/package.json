@@ -1,0 +1,19 @@
+{
+  "name": "lower-case",
+  "version": "1.0.0",
+  "description": "example node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "example"
+  ],
+  "author": "Tomas Kanocz",
+  "license": "MIT",
+  "node-red": {
+    "nodes": {
+      "lower-case": "lower-case.js"
+    }
+  }
+}
